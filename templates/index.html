@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Chart Viewer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+
+        form {
+            background: #ffffff;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 25px 35px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        select, input[type="date"] {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #2980b9;
+            color: white;
+            font-weight: bold;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #1f6391;
+        }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        object {
+            display: block;
+            width: 100%;
+            height: 600px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Chart Viewer</h1>
+
+    <form method="POST">
+        <label for="symbol">Stock Symbol:</label>
+        <select name="symbol" id="symbol">
+            <option value="Default">Select a Symbol</option>
+            {% for sym in symbols %}
+                <option value="{{ sym }}">{{ sym }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="chart_type">Chart Type:</label>
+        <select name="chart_type">
+            <option value="Default">Select a Chart Type</option>
+            <option value="line">Line</option>
+            <option value="bar">Bar</option>
+        </select>
+
+        <label for="time_series">Time Series:</label>
+        <select name="time_series">
+            <option value="Default">Select a Time Series</option>
+            <option value="TIME_SERIES_INTRADAY">Intraday</option>
+            <option value="TIME_SERIES_DAILY">Daily</option>
+            <option value="TIME_SERIES_WEEKLY">Weekly</option>
+            <option value="TIME_SERIES_MONTHLY">Monthly</option>
+        </select>
+
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" required>
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if error %}
+        <div style="color: red; margin-bottom: 20px;">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if chart_url %}
+        <object type="image/svg+xml" data="{{ chart_url }}" width="100%" height="600px"></object>
+    {% endif %}
+</body>
+</html>
